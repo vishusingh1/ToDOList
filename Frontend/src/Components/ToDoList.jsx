@@ -134,7 +134,7 @@ const ToDoList = () => {
 
   
   const handledelete = (id) => {
-    alert("do you want to delete it ")
+    alert("Your slected ToDoList will get deleted")
     setLoading(true); 
     const timeout = setTimeout(() => {
       setLoading(true);
