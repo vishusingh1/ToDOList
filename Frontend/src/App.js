@@ -17,7 +17,7 @@ function App() {
       <Footer/> */}
       <ToDoList />
       
-    </div>
+     </div>
   );
 }
 

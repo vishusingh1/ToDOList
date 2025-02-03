@@ -7,11 +7,17 @@ const ToDoList = () => {
   const [todos, setTodos] = useState([]);
   const [show, setShow] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+  const [loading, setLoading] = useState(false);
 
 
   const handleUpdateTodo = async (index, id) => {
+    
     setShow(false);
     setTodos([...todos])
+    setLoading(true); 
+      const timeout = setTimeout(() => {
+        setLoading(true);
+      }, 500); 
   
       try {
       const response = await fetch(`https://todolist-1-b1v3.onrender.com/${id}`, {
@@ -24,10 +30,12 @@ const ToDoList = () => {
       });
   
       const updatedTodo = await response.json();
+      clearTimeout(timeout); 
       const updatedTodos = [...todos];
       updatedTodos[index] = updatedTodo;  
       setTodos(updatedTodos);
       setvalue(""); 
+      setLoading(false)
     } catch (error) {
       console.error("Error updating todo:", error);
     }
@@ -47,20 +55,32 @@ const ToDoList = () => {
   
   const handleAddTodo = () => {
     if (value !== "") {
+      setLoading(true); 
+      const timeout = setTimeout(() => {
+        setLoading(true);
+      }, 500); 
       // const newTodo = {value: value };
       // const updatedTodo = [...todos, newTodo];
       // localStorage.setItem("todos", JSON.stringify(updatedTodo));
       axios.post('https://todolist-1-b1v3.onrender.com/', {value: value})
-      .then(result => setTodos([...todos, result.data]))
-      .catch(error => console.log(error))
-      setvalue("");
-      // setTodos(updatedTodo); 
-    } else {
-      alert("Please write something.");
-    }
-  };
+      .then(result => {
+        clearTimeout(timeout); 
+        setTodos([...todos, result.data]);
+        setvalue("");
+        setLoading(false); 
+      })
+      .catch(error => {
+        console.log(error);
+        clearTimeout(timeout); 
+        setLoading(false); 
+      });
+  } else {
+    alert("Please write something.");
+  }
+};
 
   const handleedit = (index) => {
+    alert("Update Your List From Input Box.")
     setShow(true);
     setvalue(todos[index].value);
     setEditIndex(index); 
@@ -114,11 +134,21 @@ const ToDoList = () => {
 
   
   const handledelete = (id) => {
+    alert("do you want to delete it ")
+    setLoading(true); 
+    const timeout = setTimeout(() => {
+      setLoading(true);
+    }, 400); 
+   
     axios.delete(`https://todolist-1-b1v3.onrender.com/${id}`)
       .then(() => {
         setTodos(todos.filter(todo => todo._id !== id));
+        clearTimeout(timeout)
+        setLoading(false)
       })
       .catch(error => console.error("Error deleting todo:", error));
+      clearTimeout(timeout)
+        setLoading(false)
   };
   
  
@@ -127,7 +157,7 @@ const ToDoList = () => {
   
 
   return (
-    <div className="h-auto bg-gray-200 py-20">
+    <div className="h-screen bg-gray-200 py-20">
       <div className="container mx-auto w-1/2 bg-white rounded-3xl">
         <div className="flex flex-row row-span-2 gap-4 items-center justify-center font-semibold text-2xl">
           To Do List
@@ -146,6 +176,7 @@ const ToDoList = () => {
             onKeyDown={(e) => e.key === `Enter` && handleKeyPress(e)}
            
           />
+
           {!show?<button
             className="text-white bg-red-900 rounded-3xl w-20 h-10 absolute right-[9rem]"onClick={handleAddTodo} >Add</button>:
             <button 
@@ -155,10 +186,13 @@ const ToDoList = () => {
             Update
           </button>
           
-          
           }
-            {/* {editIndex !== null ? "Update" : "Add"} */}
+         
+           
         </div>
+        {loading && <div className="loader flex items-center justify-center"><svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M12 6.99998C9.1747 6.99987 6.99997 9.24998 7 12C7.00003 14.55 9.02119 17 12 17C14.7712 17 17 14.75 17 12">
+              <animateTransform attributeName="transform" attributeType="XML" dur="560ms" from="0,12,12" repeatCount="indefinite" to="360,12,12" type="rotate"/>
+              </path></svg></div>}
         <ul className="p-5">
           {todos.map((todo, index) => (
             <li
