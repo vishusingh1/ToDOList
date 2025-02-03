@@ -10,14 +10,10 @@ app.use(cors());
 app.use(express.json());
 
 
-mongoose.connect('mongodb://localhost:27017/test', { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect("mongodb+srv://Vishal:icici%40123@cluster0.c6i0g.mongodb.net/test")
+  .then(() => console.log("MongoDB Connected Successfully!"))
+  .catch((err) => console.error("MongoDB Connection Error:", err));
 
-  .then(() => {
-    console.log("MongoDB connected successfully");
-  })
-  .catch((error) => {
-    console.error("MongoDB connection error:", error);
-  });
 
 
 app.post('/', (req, res) => {
