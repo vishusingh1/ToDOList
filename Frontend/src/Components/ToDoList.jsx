@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 // import {axios} from 'axios'
 import axios from 'axios'
 
@@ -34,18 +34,15 @@ const ToDoList = () => {
   };
   
   
-  const fetchTodos = () => {
-    // const localstoredTodos = JSON.parse(localStorage.getItem("todos"));
-    // setTodos(localstoredTodos);
-    axios.get('https://todolist-1-b1v3.onrender.com/', (value.todos) )
-    .then((result) => setTodos(result.data))
-    .catch( (error) => console.log(error))
-  };
-
-
+  const fetchTodos = useCallback(() => {
+    axios.get('https://todolist-1-b1v3.onrender.com/')
+      .then((result) => setTodos(result.data))
+      .catch((error) => console.log(error));
+  }, []);  
+  
   useEffect(() => {
     fetchTodos();
-  }, []);
+  }, [fetchTodos]); 
 
   
   const handleAddTodo = () => {
