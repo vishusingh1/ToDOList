@@ -14,7 +14,7 @@ const ToDoList = () => {
     setTodos([...todos])
   
       try {
-      const response = await fetch(`http://localhost:3001/${id}`, {
+      const response = await fetch(`https://todolist-1-b1v3.onrender.com/${id}`, {
         method: "PUT",
         headers: {
           "Accept": "application/json",
@@ -37,7 +37,7 @@ const ToDoList = () => {
   const fetchTodos = () => {
     // const localstoredTodos = JSON.parse(localStorage.getItem("todos"));
     // setTodos(localstoredTodos);
-    axios.get('http://localhost:3001/', (value.todos) )
+    axios.get('https://todolist-1-b1v3.onrender.com/', (value.todos) )
     .then((result) => setTodos(result.data))
     .catch( (error) => console.log(error))
   };
@@ -53,7 +53,7 @@ const ToDoList = () => {
       // const newTodo = {value: value };
       // const updatedTodo = [...todos, newTodo];
       // localStorage.setItem("todos", JSON.stringify(updatedTodo));
-      axios.post('http://localhost:3001/', {value: value})
+      axios.post('https://todolist-1-b1v3.onrender.com/', {value: value})
       .then(result => setTodos([...todos, result.data]))
       .catch(error => console.log(error))
       setvalue("");
@@ -102,7 +102,7 @@ const ToDoList = () => {
     //   } 
  
     if(value !== "" && e.key === 'Enter'){
-      axios.post('http://localhost:3001/', {value: value})
+      axios.post('https://todolist-1-b1v3.onrender.com/', {value: value})
       .then(result => setTodos([...todos, result.data]))
       .catch(error => console.log(error))
       setvalue("");
@@ -117,7 +117,7 @@ const ToDoList = () => {
 
   
   const handledelete = (id) => {
-    axios.delete(`http://localhost:3001/${id}`)
+    axios.delete(`https://todolist-1-b1v3.onrender.com/${id}`)
       .then(() => {
         setTodos(todos.filter(todo => todo._id !== id));
       })
